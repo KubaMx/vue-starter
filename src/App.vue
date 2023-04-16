@@ -1,39 +1,40 @@
 <template>
   <div class="my-app">
 
-    <div v-if="loggedIn">Witaj {{email}}
+    <div v-if="authenticatedUserName.length > 0">Witaj {{authenticatedUserName}}
       <button @click="logMeOut()">Wyloguj</button>
     </div>
 
     <div v-else>
-    <h1>Witaj w systemie do zapisow na zajecia</h1>
-    <div>Zaloguj sie mailem:
-    <input type="email" v-model="email">
-      <button @click="logMeIn()">Wchodze</button></div>
+      <LoginForm @login="(username) => logMeIn(username)"></LoginForm>
+      <LoginForm @login="(username) => logMeIn(username)" button-label="Wejdź"></LoginForm>
+      <LoginForm @login="(username) => logMeIn(username)" button-label="Wleć"></LoginForm>
+      <LoginForm @@login="(username) => logMeIn(username)" button-label="Math.random() < 0.5 ? 'Etykieta A' : 'Etykieta B'"></LoginForm>
     </div>
-
 
   </div>
 
 </template>
 
 <script>
+import "milligram";
+import LoginForm from "./LoginForm";
 export default {
+  components: {LoginForm},
   data() {
-    return {
-      email: '',
-      password: '',
-      loggedIn: false
-    };
+  return {
+    authenticatedUserName: '',
+    password: '',
+  };
+},
+methods: {
+  logMeIn(username) {
+      this.authenticatedUserName = username;
   },
-  methods: {
-    logMeIn() {
-        this.loggedIn = true;
-    },
-    logMeOut() {
-      this.loggedIn = false;
-    }
+  logMeOut() {
+    this.authenticatedUserName = '';
   }
+}
 }
 </script>
 
